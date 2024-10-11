@@ -10,7 +10,7 @@ const EXPIRATION_SET_KEY = 'reservations_expirations';
 async function cleanUpExpiredEntries() {
   const now = Date.now(); // Current time in milliseconds
 
-  console.log('Current time (seconds):', now);
+  console.log('Current time (milliseconds):', now);
 
   // Get all entries with their scores
   const allEntriesWithScores = await redis.zrange(EXPIRATION_SET_KEY, 0, -1, 'WITHSCORES');
