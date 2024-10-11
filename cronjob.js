@@ -12,7 +12,9 @@ async function cleanUpExpiredEntries() {
 
   // Get all expired entries
   const expiredEntries = await redis.zrangebyscore(EXPIRATION_SET_KEY, 0, -1);
-
+  
+  console.log('Expired entries: ', JSON.stringify(expiredEntries));
+  
   if (expiredEntries.length > 0) {
     const pipeline = redis.pipeline();
 
