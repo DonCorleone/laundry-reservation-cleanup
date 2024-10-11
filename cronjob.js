@@ -8,7 +8,7 @@ const EXPIRATION_SET_KEY = 'reservations_expirations';
 
 // Function to clean up expired entries
 async function cleanUpExpiredEntries() {
-  const now = Math.floor(Date.now() / 1000); // Current time in seconds
+  const now = Date.now(); // Current time in milliseconds
 
   console.log('Current time (seconds):', now);
 
