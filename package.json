@@ -1,0 +1,23 @@
+{
+  "name": "laundry-reservation-cleanup",
+  "version": "1.0.0",
+  "description": "render cron job",
+  "main": "cronjob.js",
+  "scripts": {
+    "start": "node cronjob.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DonCorleone/laundry-reservation-cleanup.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DonCorleone/laundry-reservation-cleanup/issues"
+  },
+  "homepage": "https://github.com/DonCorleone/laundry-reservation-cleanup#readme",
+  "dependencies": {
+    "ioredis": "^5.4.1"
+  }
+}
