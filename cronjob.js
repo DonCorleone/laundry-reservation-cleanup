@@ -12,10 +12,10 @@ async function cleanUpExpiredEntries() {
 
   console.log('Current time (seconds):', now);
 
-  // Get all entries with their scores
-  const allEntriesWithScores = await redis.zrange(EXPIRATION_SET_KEY, 0, -1, 'WITHSCORES');
+  // Get all entries without scores
+  const allEntries = await redis.zrange(EXPIRATION_SET_KEY, 0, -1);
 
-  console.log('All entries with scores: ', JSON.stringify(allEntriesWithScores));
+  console.log('All entries: ', JSON.stringify(allEntries));
 
   // Get all expired entries
   const expiredEntries = await redis.zrangebyscore(EXPIRATION_SET_KEY, 0, now);
