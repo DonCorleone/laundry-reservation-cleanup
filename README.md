@@ -1,1 +1,1 @@
-# -laundry-reservation-cleanup
+# laundry-reservation-cleanup
