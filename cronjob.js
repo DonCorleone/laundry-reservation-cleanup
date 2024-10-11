@@ -11,7 +11,7 @@ async function cleanUpExpiredEntries() {
   const now = Math.floor(Date.now() / 1000); // Current time in seconds
 
   // Get all expired entries
-  const expiredEntries = await redis.zrangebyscore(EXPIRATION_SET_KEY, 0, now);
+  const expiredEntries = await redis.zrangebyscore(EXPIRATION_SET_KEY, 0, -1);
 
   if (expiredEntries.length > 0) {
     const pipeline = redis.pipeline();
