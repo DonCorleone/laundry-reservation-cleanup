@@ -26,9 +26,12 @@ async function cleanUpExpiredEntries() {
     const pipeline = redis.pipeline();
 
     expiredEntries.forEach(entry => {
-      // Remove from the hash and the sorted set
-      pipeline.hdel(entry, entry);
-      pipeline.zrem(EXPIRATION_SET_KEY, entry);
+      const key = entry.split('-').pop(); // Extract the postfix after the "-"
+      if (key) {
+        // Remove from the hash and the sorted set
+        pipeline.hdel(key, entry);
+        pipeline.zrem(EXPIRATION_SET_KEY, entry);
+      }
     });
 
     await pipeline.exec();
