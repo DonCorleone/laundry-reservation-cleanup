@@ -8,18 +8,32 @@ const EXPIRATION_SET_KEY = 'reservations_expirations';
 
 // Function to clean up expired entries
 async function cleanUpExpiredEntries() {
-  const now = Math.floor(Date.now() / 1000); // Current time in seconds
+  const now = Date.now(); // Current time in milliseconds
+
+  console.log('Current time (milliseconds):', now);
+
+  // Determine the expiration time based on the mode
+  const mode = process.env.MODE || 'production';
+  const expirationTime = mode === 'test' ? now - 30 * 60 * 1000 : now - 5 * 7 * 24 * 60 * 60 * 1000; // 30 minutes for test, 5 weeks for production
+
+  console.log(`Mode: ${mode}`);
+  console.log(`Expiration time (milliseconds):`, expirationTime);
 
   // Get all expired entries
-  const expiredEntries = await redis.zrangebyscore(EXPIRATION_SET_KEY, 0, now);
+  const expiredEntries = await redis.zrangebyscore(EXPIRATION_SET_KEY, 0, expirationTime);
+
+  console.log('Expired entries: ', JSON.stringify(expiredEntries));
 
   if (expiredEntries.length > 0) {
     const pipeline = redis.pipeline();
 
     expiredEntries.forEach(entry => {
-      // Remove from the hash and the sorted set
-      pipeline.hdel(entry, entry);
-      pipeline.zrem(EXPIRATION_SET_KEY, entry);
+      const key = entry.split('-').pop(); // Extract the postfix after the "-"
+      if (key) {
+        // Remove from the hash and the sorted set
+        pipeline.hdel(key, entry);
+        pipeline.zrem(EXPIRATION_SET_KEY, entry);
+      }
     });
 
     await pipeline.exec();
