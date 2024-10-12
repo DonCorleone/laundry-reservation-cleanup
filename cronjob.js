@@ -12,13 +12,15 @@ async function cleanUpExpiredEntries() {
 
   console.log('Current time (milliseconds):', now);
 
-  // Get all entries with their scores
-  const allEntriesWithScores = await redis.zrange(EXPIRATION_SET_KEY, 0, -1, 'WITHSCORES');
+  // Determine the expiration time based on the mode
+  const mode = process.env.MODE || 'production';
+  const expirationTime = mode === 'test' ? now - 30 * 60 * 1000 : now - 5 * 7 * 24 * 60 * 60 * 1000; // 30 minutes for test, 5 weeks for production
 
-  console.log('All entries with scores: ', JSON.stringify(allEntriesWithScores));
+  console.log(`Mode: ${mode}`);
+  console.log(`Expiration time (milliseconds):`, expirationTime);
 
   // Get all expired entries
-  const expiredEntries = await redis.zrangebyscore(EXPIRATION_SET_KEY, 0, now);
+  const expiredEntries = await redis.zrangebyscore(EXPIRATION_SET_KEY, 0, expirationTime);
 
   console.log('Expired entries: ', JSON.stringify(expiredEntries));
 
